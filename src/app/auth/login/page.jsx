@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiZap, FiShield, FiCode } from 'react-icons/fi';
 import Link from 'next/link';
-
+import { useAuth } from '@/app/context/AuthContext';
 const Particle = ({ x, y, size, color, rotate }) => {
   return (
     <motion.div
@@ -68,6 +68,7 @@ const FeatureCard = ({ icon: Icon, title, description, delay }) => {
 };
 
 export default function LoginPage() {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -99,6 +100,46 @@ export default function LoginPage() {
     return () => clearInterval(interval);
   }, []);
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  
+  //   try {
+  //     const response = await fetch('/api/auth/login', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ email, password }),
+  //     });
+  
+  //     const data = await response.json();
+  //     console.log(data);
+  
+  //     if (response.ok) {
+  //       // Save token or user data to localStorage or context
+  //       login(data.token,data.user);
+  //       // localStorage.setItem('token', data.token);
+
+  //       // localStorage.setItem('user', JSON.stringify(data.user)); 
+        
+  //       // console.log('Login Success:', data);
+  //       // console.log(JSON.stringify(data.user))
+  
+  //       // Redirect to dashboard or homepage
+  //        window.location.href = '/mainpage';
+  //     } else {
+  //       // Show error (You can use toast or alert)
+  //       alert(data.message || 'Login failed');
+  //     }
+  //   } catch (error) {
+  //     console.error('Login error:', error);
+  //     alert('Something went wrong. Try again!');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -113,18 +154,15 @@ export default function LoginPage() {
       });
   
       const data = await response.json();
-      console.log(data);
   
       if (response.ok) {
-        // Save token or user data to localStorage or context
-        localStorage.setItem('token', data.token);
+        // Use the imported login function
+        login(data.token, data.user);
         
-        console.log('Login Success:', data);
-  
-        // Redirect to dashboard or homepage
-        window.location.href = '/mainpage';
+        // Navigate to the dashboard
+        // window.location.href = '/mainpage';
       } else {
-        // Show error (You can use toast or alert)
+        // Show error
         alert(data.message || 'Login failed');
       }
     } catch (error) {
@@ -134,8 +172,6 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
-  
-
   return (
     <div className="min-h-screen flex bg-gray-950">
       {/* Left side - Login Form */}

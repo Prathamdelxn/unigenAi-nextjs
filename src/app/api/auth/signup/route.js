@@ -22,13 +22,13 @@ export async function POST(request) {
       });
     }
 
-    const newUser = await User.create({ name, email, password });
+    const newUser = await User.create({ name, email, password ,plan:"Basic",imageGenerator:0, videoGenerator:0,audioGenerator:0,codeGenerator:0});
 
     return new Response(
       JSON.stringify({
         success: true,
         message: 'User registered successfully',
-        user: { name: newUser.name, email: newUser.email },
+        user: { name: newUser.name, email: newUser.email},
       }),
       { status: 201 }
     );

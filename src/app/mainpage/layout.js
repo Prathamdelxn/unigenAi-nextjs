@@ -68,8 +68,8 @@ export default function DashboardLayout({ children }) {
   const menuItems = [
     { href: "/mainpage/imageGeneration", label: "Image Generation", icon: "🖼️" },
     { href: "/mainpage/videoGeneration", label: "Video Generation", icon: "🎬" },
-    { href: "/mainpage/pptgeneration", label: "PPT Generation", icon: "📊" },
-    { href: "/mainpage/audiogeneration", label: "Music Generation", icon: "🎵" },
+    { href: "/mainpage/codegeneration", label: "Code Generation", icon: "📊" },
+    { href: "/mainpage/audiogeneration", label: "Audio Generation", icon: "🎵" },
     { 
       href: "/dashboard/interview", 
       label: "Interview Preparation", 
@@ -95,6 +95,7 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
+    
     <div className="flex h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white overflow-hidden">
       {/* Mobile sidebar toggle button */}
       <button 

@@ -9,37 +9,38 @@ const AuthContext = createContext();
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
   const router = useRouter();
-  const [user, setUser] = useState(null); // You can store user data or just a token
+  const [userData, setUser] = useState(null); // You can store user data or just a token
   const [loading, setLoading] = useState(true);
 
   // Check if user is already logged in on initial load
   useEffect(() => {
     const token = localStorage.getItem('token');
-
-    if (token) {
-      // Optional: validate token from server or decode user info from JWT
-      setUser({ token });
+    const userData = localStorage.getItem('user');
+    if (token && userData) {
+      setUser({ token, ...JSON.parse(userData) });
     }
 
     setLoading(false);
   }, []);
 
   // Login function
-  const login = (token, userData) => {
+   const login = (token, userData) => {
     localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
     setUser({ token, ...userData });
-    router.push('/mainpage');
+    console.log(userData)
+     router.push('/mainpage');
   };
 
   // Logout function
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
     router.push('/auth/login');
   };
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ userData, login, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

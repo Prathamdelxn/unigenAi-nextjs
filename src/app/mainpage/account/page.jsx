@@ -2,19 +2,53 @@
 'use client'
 
 import { logout } from '@/utils/logout';
+import { useAuth } from '@/app/context/AuthContext';
 import { FaUser,  FaChevronRight,FaEnvelope, FaCrown, FaHistory, FaCreditCard, FaSignOutAlt, FaCog } from 'react-icons/fa';
 import { MdSecurity, MdApi } from 'react-icons/md';
 import { RiVipCrownFill } from 'react-icons/ri';
-
+import { useState,useEffect } from 'react';
 export default function AccountPage() {
+
+ const {userData}=useAuth();
+   const [newuserData, setnewUserData] = useState(null);
+
+  useEffect(() => {
+    console.log("datais",userData)
+    if (userData) {
+      // If you have all user data in auth context
+
+      // OR fetch fresh data from API
+    
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`/api/fetch-user-by-email/?email=${userData.email}`);
+
+          const data = await response.json();
+          setnewUserData(data.user);
+         console.log("this is fetch data",data);
+        } catch (error) {
+          console.error('Failed to fetch user data:', error);
+        } finally {
+         
+        }
+      };
+      fetchUserData();
+     
+    }
+  }, []);
+  // console.log(newuserData.name)
   // Mock user data - replace with your actual data fetching
   const user = {
-    name: "Alex Johnson",
-    email: "alex@unigen.ai",
-    subscription: "pro",
-    apiUsage: 65,
-    joinDate: "January 15, 2023",
-    lastActive: "2 hours ago"
+    name: newuserData?.name || "Loading...",
+    email: newuserData?.email || "Loading...",
+    subscription: newuserData?.plan || "Loading...",
+    imageGenerator:newuserData?.imageGenerator || "0",
+    audioGenerator:newuserData?.audioGenerator || "0",
+    audioGenerator:newuserData?.audioGenerator || "0",
+
+
+  
+   
   };
 
   const subscriptionPlans = {
@@ -42,7 +76,7 @@ export default function AccountPage() {
                   </div>
                 )}
               </div>
-              <h2 className="mt-4 text-xl font-bold">{user.name}</h2>
+              <h2 className="mt-4 text-xl font-bold">{user.name} </h2>
               <p className="text-slate-400 flex items-center">
                 <FaEnvelope className="mr-2" size={14} />
                 {user.email}
@@ -52,11 +86,11 @@ export default function AccountPage() {
             <div className="mt-6 pt-6 border-t border-slate-700/50">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-slate-400">Member since</span>
-                <span>{user.joinDate}</span>
+                <span>January 15, 2023</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Last active</span>
-                <span>{user.lastActive}</span>
+                <span className="text-slate-400">Status</span>
+                <span className='text-green-500'>Online</span>
               </div>
             </div>
           </div>
@@ -75,13 +109,13 @@ export default function AccountPage() {
                 </span>
                 <FaChevronRight size={12} />
               </button>
-              <button className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/50 transition">
+              {/* <button className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/50 transition">
                 <span className="flex items-center">
                   <MdApi className="mr-2" />
                   API Keys
                 </span>
                 <FaChevronRight size={12} />
-              </button>
+              </button> */}
               <button className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/50 transition">
                 <span className="flex items-center">
                   <FaHistory className="mr-2" />
@@ -148,12 +182,12 @@ export default function AccountPage() {
               <div>
                 <div className="flex justify-between mb-2">
                   <span>API Usage</span>
-                  <span>{user.apiUsage}% of limit</span>
+                  <span>65% of limit</span>
                 </div>
                 <div className="w-full bg-slate-700 rounded-full h-2.5">
                   <div 
-                    className={`h-2.5 rounded-full ${user.apiUsage > 90 ? 'bg-red-500' : 'bg-indigo-500'}`} 
-                    style={{ width: `${user.apiUsage}%` }}
+                    className={`h-2.5 rounded-full ${65 > 90 ? 'bg-red-500' : 'bg-indigo-500'}`} 
+                    style={{ width: `65%` }}
                   ></div>
                 </div>
               </div>
@@ -161,15 +195,15 @@ export default function AccountPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-slate-700/50 p-4 rounded-lg">
                   <div className="text-slate-400 text-sm">Images Generated</div>
-                  <div className="text-xl font-bold mt-1">1,248</div>
+                  <div className="text-xl font-bold mt-1">{user.imageGenerator}</div>
                 </div>
                 <div className="bg-slate-700/50 p-4 rounded-lg">
                   <div className="text-slate-400 text-sm">Videos Created</div>
-                  <div className="text-xl font-bold mt-1">87</div>
+                  <div className="text-xl font-bold mt-1">{user.audioGenerator}</div>
                 </div>
                 <div className="bg-slate-700/50 p-4 rounded-lg">
-                  <div className="text-slate-400 text-sm">API Calls</div>
-                  <div className="text-xl font-bold mt-1">2,415</div>
+                  <div className="text-slate-400 text-sm">Audio Created</div>
+                  <div className="text-xl font-bold mt-1">{user.audioGenerator}</div>
                 </div>
               </div>
             </div>
