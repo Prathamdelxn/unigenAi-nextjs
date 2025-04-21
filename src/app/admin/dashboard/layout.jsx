@@ -14,8 +14,8 @@ export default function RootLayout({ children }) {
   const [darkMode, setDarkMode] = useState(true);
 
   return (
-    <html lang="en" className={darkMode ? 'dark' : ''}>
-      <body className={`${inter.className} bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex h-screen overflow-hidden`}>
+    <div lang="en" className={darkMode ? 'dark' : ''}>
+      <div className={`${inter.className} bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex h-screen overflow-hidden`}>
         {/* Sidebar */}
         <aside className={`bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-20'} flex flex-col border-r border-gray-200 dark:border-gray-700`}>
           <div className="p-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
@@ -38,9 +38,9 @@ export default function RootLayout({ children }) {
           <nav className="flex-1 overflow-y-auto p-4 space-y-1">
             <NavItem icon={<AiOutlineDashboard />} text="Dashboard" href="/admin/dashboard" open={sidebarOpen} />
             <NavItem icon={<FiUsers />} text="Users" href="/admin/dashboard/users" open={sidebarOpen} />
-            <NavItem icon={<FiFolder />} text="Projects" href="/admin/dashboard/projects" open={sidebarOpen} />
-            <NavItem icon={<FiPieChart />} text="Analytics" href="/admin/dashboard/analytics" open={sidebarOpen} />
-            <NavItem icon={<FiCalendar />} text="Calendar" href="/admin/dashboard/calendar" open={sidebarOpen} />
+            <NavItem icon={<FiFolder />} text="Tools" href="/admin/dashboard/tools-management" open={sidebarOpen} />
+            <NavItem icon={<FiPieChart />} text="Revenue" href="/admin/dashboard/analytics" open={sidebarOpen} />
+            <NavItem icon={<FiCalendar />} text="Subscription" href="/admin/dashboard/Subscription-management" open={sidebarOpen} />
           </nav>
 
           <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
@@ -83,8 +83,8 @@ export default function RootLayout({ children }) {
             {children}
           </main>
         </div>
-      </body>
-    </html>
+      </div>
+    </div>
   );
 }
 
