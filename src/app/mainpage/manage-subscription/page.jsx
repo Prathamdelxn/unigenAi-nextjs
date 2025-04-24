@@ -21,7 +21,7 @@ const SubscriptionPage = () => {
   const plans = {
     basic: {
       name: 'Basic',
-      price: { monthly: 9, yearly: 90 },
+      price: { monthly: 0, yearly: 90 },
       description: 'Essential AI generation',
       color: 'bg-gray-600',
       icon: '⭐',
@@ -34,7 +34,7 @@ const SubscriptionPage = () => {
     },
     lite: {
       name: 'Lite',
-      price: { monthly: 19, yearly: 190 },
+      price: { monthly: 119, yearly: 190 },
       description: 'For casual creators',
       color: 'bg-gradient-to-r from-green-500 to-emerald-600',
       icon: '🚀',
@@ -48,7 +48,7 @@ const SubscriptionPage = () => {
     },
     pro: {
       name: 'Pro',
-      price: { monthly: 49, yearly: 490 },
+      price: { monthly: 199, yearly: 490 },
       description: 'For professionals',
       color: 'bg-gradient-to-r from-purple-500 to-indigo-600',
       icon: '✨',
@@ -62,7 +62,7 @@ const SubscriptionPage = () => {
     },
     advanced: {
       name: 'Advanced',
-      price: { monthly: 99, yearly: 990 },
+      price: { monthly: 299, yearly: 990 },
       description: 'For businesses',
       color: 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500',
       icon: '👑',
@@ -125,7 +125,7 @@ const SubscriptionPage = () => {
               Yearly
               {billingCycle === 'yearly' && (
                 <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">
-                  Save {calculateSavings(selectedPlan)}$
+                  Save {calculateSavings(selectedPlan)}₹
                 </span>
               )}
             </button>
@@ -158,7 +158,7 @@ const SubscriptionPage = () => {
 
                 <div className="mb-6">
                   <span className="text-3xl font-bold">
-                    ${billingCycle === 'monthly' ? plan.price.monthly : plan.price.yearly}
+                    ₹{billingCycle === 'monthly' ? plan.price.monthly : plan.price.yearly}
                   </span>
                   <span className="text-slate-400 ml-1">
                     /{billingCycle === 'monthly' ? 'mo' : 'yr'}
@@ -205,7 +205,7 @@ const SubscriptionPage = () => {
               <div className="flex justify-between">
                 <span className="text-slate-400">Price</span>
                 <span className="font-medium">
-                  ${billingCycle === 'monthly' 
+                  ₹{billingCycle === 'monthly' 
                     ? plans[selectedPlan].price.monthly 
                     : plans[selectedPlan].price.yearly}
                 </span>
@@ -213,7 +213,7 @@ const SubscriptionPage = () => {
               {billingCycle === 'yearly' && (
                 <div className="flex justify-between text-green-400">
                   <span>Yearly Savings</span>
-                  <span>${calculateSavings(selectedPlan)}</span>
+                  <span>₹{calculateSavings(selectedPlan)}</span>
                 </div>
               )}
             </div>
@@ -222,7 +222,7 @@ const SubscriptionPage = () => {
               <div className="flex justify-between font-bold text-lg">
                 <span>Total</span>
                 <span>
-                  ${billingCycle === 'monthly' 
+                  ₹{billingCycle === 'monthly' 
                     ? plans[selectedPlan].price.monthly 
                     : plans[selectedPlan].price.yearly}
                 </span>

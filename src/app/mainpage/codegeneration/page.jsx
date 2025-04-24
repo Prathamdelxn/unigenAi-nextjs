@@ -4,7 +4,6 @@ import { FiSend, FiCopy, FiDownload, FiRefreshCw, FiCode, FiSettings } from 'rea
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vsDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-
 const CodeGenerator = () => {
   const [prompt, setPrompt] = useState('');
   const [generatedCode, setGeneratedCode] = useState('');
@@ -15,11 +14,21 @@ const CodeGenerator = () => {
   const [settings, setSettings] = useState({
     temperature: 0.7,
     maxTokens: 1000,
-    quality: 'balanced' // 'fast', 'balanced', 'quality'
+    model: 'deepseek-coder' // DeepSeek model
   });
   
   const codeRef = useRef(null);
   const promptRef = useRef(null);
+  const API_KEY = "sk-8c34227aa00446fd935b0b84c057b6c5"; // Your DeepSeek API key
+
+  const detectLanguage = (code) => {
+    if (code.includes('React') || code.includes('jsx')) return 'javascript';
+    if (code.includes('def ') || code.includes('import ')) return 'python';
+    if (code.includes('function ') || code.includes('=>')) return 'javascript';
+    if (code.includes('class ') || code.includes('public ')) return 'java';
+    if (code.includes('#include')) return 'cpp';
+    return 'javascript';
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,32 +36,53 @@ const CodeGenerator = () => {
     
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify({
+          model: settings.model,
+          messages: [
+            {
+              role: "user",
+              content: `Generate ${language} code for: ${prompt}. Only respond with the code, no explanations.`
+            }
+          ],
+          temperature: settings.temperature,
+          max_tokens: settings.maxTokens
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      const code = data.choices?.[0]?.message?.content || "// No code generated";
       
-      // Mock response - replace with your actual API call
-      const mockResponse = {
-        code: `// ${prompt}\nfunction ${prompt.toLowerCase().replace(/\s+/g, '_')}() {\n  // Generated code\n  console.log("Hello from ${prompt}");\n}`,
-        language: 'javascript'
-      };
-      
-      setGeneratedCode(mockResponse.code);
-      setLanguage(mockResponse.language);
+      setGeneratedCode(code);
+      const detectedLanguage = detectLanguage(code);
+      setLanguage(detectedLanguage);
       
       // Add to history
       setHistory(prev => [{
         prompt,
-        code: mockResponse.code,
+        code: code,
+        language: detectedLanguage,
         timestamp: new Date().toISOString()
       }, ...prev.slice(0, 4)]);
       
     } catch (error) {
       console.error("Error generating code:", error);
+      setGeneratedCode(`// Error generating code: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Rest of your existing functions (copyToClipboard, downloadCode, regenerateCode) remain the same
   const copyToClipboard = () => {
     if (generatedCode) {
       navigator.clipboard.writeText(generatedCode);
@@ -76,7 +106,20 @@ const CodeGenerator = () => {
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100">
       {/* Header */}
-   
+      <header className="bg-gray-800/50 border-b border-gray-700 p-4">
+        <div className="container mx-auto max-w-7xl flex justify-between items-center">
+          <h1 className="text-xl font-bold flex items-center gap-2">
+            <FiCode className="text-blue-400" />
+            <span>AI <span className="text-blue-400">Code</span> Generator</span>
+          </h1>
+          <button
+            onClick={() => setShowSettings(!showSettings)}
+            className={`p-2 rounded-lg ${showSettings ? 'bg-blue-600' : 'bg-gray-700'} hover:bg-blue-700 transition-colors`}
+          >
+            <FiSettings />
+          </button>
+        </div>
+      </header>
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar - History */}
@@ -96,13 +139,19 @@ const CodeGenerator = () => {
                     onClick={() => {
                       setPrompt(item.prompt);
                       setGeneratedCode(item.code);
+                      setLanguage(item.language);
                       promptRef.current?.focus();
                     }}
                   >
                     <p className="text-sm line-clamp-2">{item.prompt}</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {new Date(item.timestamp).toLocaleTimeString()}
-                    </p>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-xs text-gray-400">
+                        {new Date(item.timestamp).toLocaleTimeString()}
+                      </span>
+                      <span className="text-xs px-2 py-1 bg-gray-600 rounded-full">
+                        {item.language}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -154,16 +203,19 @@ const CodeGenerator = () => {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-400 mb-1">
-                      Quality
+                      Language
                     </label>
                     <select
-                      value={settings.quality}
-                      onChange={(e) => setSettings({...settings, quality: e.target.value})}
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
                       className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-sm"
                     >
-                      <option value="fast">Fast</option>
-                      <option value="balanced">Balanced</option>
-                      <option value="quality">High Quality</option>
+                      <option value="javascript">JavaScript</option>
+                      <option value="python">Python</option>
+                      <option value="java">Java</option>
+                      <option value="cpp">C++</option>
+                      <option value="html">HTML</option>
+                      <option value="css">CSS</option>
                     </select>
                   </div>
                 </div>
@@ -219,7 +271,7 @@ const CodeGenerator = () => {
                 <FiCode className="text-5xl text-gray-600 mb-4" />
                 <h2 className="text-xl font-medium text-gray-400 mb-2">No code generated yet</h2>
                 <p className="text-gray-500 max-w-md">
-                  Enter a prompt describing the code you need and let our AI generate it for you.
+                  Enter a prompt describing the code you need and let DeepSeek AI generate it for you.
                 </p>
               </div>
             )}

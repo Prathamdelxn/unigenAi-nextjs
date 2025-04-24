@@ -92,13 +92,7 @@ export default function ToolsSection() {
                 </div>
               </div>
               
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`mt-4 rounded-md bg-gradient-to-r ${tool.color} px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-${tool.color.split(' ')[0].split('-')[1]}-500`}
-              >
-                Try {tool.name} →
-              </motion.button>
+            
             </motion.div>
           ))}
         </div>

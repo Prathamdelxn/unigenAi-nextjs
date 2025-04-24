@@ -21,6 +21,7 @@ export default function AdminSubscriptionManagement() {
         }
         
         const data = await response.json();
+        console.log(data.data);
         setPlans(data.data); // Assuming data.data contains your array of plans
       } catch (err) {
         setError(err.message);
