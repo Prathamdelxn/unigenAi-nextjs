@@ -54,6 +54,7 @@ export default function AccountPage() {
   const subscriptionPlans = {
     basic: { name: "Basic", color: "bg-gray-600", features: ["Image Generation", "Basic Support"] },
     pro: { name: "Pro", color: "bg-gradient-to-r from-purple-600 to-indigo-700", features: ["All Basic features", "Video Generation", "Priority Support", "Higher Resolution"] },
+    lite:{name:"Lite",color:"bg-gradient-to-r from-green-600 to-blue-700",features:["No watermark" ,"Standard Support","High Quality Resolution"]},
     advanced: { name: "Advanced", color: "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600", features: ["All Pro features", "Interview Prep", "API Access", "Highest Priority"] }
   };
 

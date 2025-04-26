@@ -2,8 +2,9 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { Search, Film, X, ExternalLink, Clock, History, Play, Sparkles } from 'lucide-react';
-
+import { useAuth } from '@/app/context/AuthContext';
 const VideoGeneration = () => {
+  const {userData}=useAuth();
   const [query, setQuery] = useState('');
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,21 @@ const VideoGeneration = () => {
     localStorage.setItem('videoSearchHistory', JSON.stringify(newHistory));
   };
 
+  const incrementVideo = async () => {
+    console.log("datais",userData)
+    const email=userData.email;
+    const res = await fetch('/api/users/increment-video', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+  
+    const data = await res.json();
+    console.log(data);
+  };
+  
   const generateVideos = async (searchTerm = query) => {
     if (!searchTerm.trim()) return;
     
@@ -49,6 +65,7 @@ const VideoGeneration = () => {
       const data = await response.json();
       setVideos(data.videos || []);
       addToSearchHistory(searchTerm);
+      incrementVideo();
     } catch (err) {
       setError(err.message);
       setVideos([]);

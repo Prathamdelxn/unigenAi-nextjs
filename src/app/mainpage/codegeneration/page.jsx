@@ -30,6 +30,61 @@ const CodeGenerator = () => {
     return 'javascript';
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!prompt.trim()) return;
+    
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": `Bearer ${API_KEY}`
+  //       },
+  //       body: JSON.stringify({
+  //         model: settings.model,
+  //         messages: [
+  //           {
+  //             role: "user",
+  //             content: `Generate ${language} code for: ${prompt}. Only respond with the code, no explanations.`
+  //           }
+  //         ],
+  //         temperature: settings.temperature,
+  //         max_tokens: settings.maxTokens
+  //       })
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error(`API request failed with status ${response.status}`);
+  //     }
+
+  //     const data = await response.json();
+  //     const code = data.choices?.[0]?.message?.content || "// No code generated";
+      
+  //     setGeneratedCode(code);
+  //     const detectedLanguage = detectLanguage(code);
+  //     setLanguage(detectedLanguage);
+      
+  //     // Add to history
+  //     setHistory(prev => [{
+  //       prompt,
+  //       code: code,
+  //       language: detectedLanguage,
+  //       timestamp: new Date().toISOString()
+  //     }, ...prev.slice(0, 4)]);
+      
+  //   } catch (error) {
+  //     console.error("Error generating code:", error);
+  //     setGeneratedCode(`// Error generating code: ${error.message}`);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // Rest of your existing functions (copyToClipboard, downloadCode, regenerateCode) remain the same
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
@@ -43,24 +98,30 @@ const CodeGenerator = () => {
           "Authorization": `Bearer ${API_KEY}`
         },
         body: JSON.stringify({
-          model: settings.model,
+          model: "deepseek-chat", // Use correct model name
           messages: [
             {
+              role: "system",
+              content: "You are a helpful coding assistant. Respond only with the code, no explanations."
+            },
+            {
               role: "user",
-              content: `Generate ${language} code for: ${prompt}. Only respond with the code, no explanations.`
+              content: `Generate ${language} code for: ${prompt}`
             }
           ],
           temperature: settings.temperature,
-          max_tokens: settings.maxTokens
+          max_tokens: settings.maxTokens,
+          stream: false
         })
       });
-
-      if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
-      }
-
+  
       const data = await response.json();
-      const code = data.choices?.[0]?.message?.content || "// No code generated";
+      
+      if (!response.ok) {
+        throw new Error(data.error?.message || `API request failed with status ${response.status}`);
+      }
+  
+      const code = data.choices?.[0]?.message?.content?.trim() || "// No code generated";
       
       setGeneratedCode(code);
       const detectedLanguage = detectLanguage(code);
@@ -76,13 +137,12 @@ const CodeGenerator = () => {
       
     } catch (error) {
       console.error("Error generating code:", error);
-      setGeneratedCode(`// Error generating code: ${error.message}`);
+      setGeneratedCode(`// Error generating code: ${error.message}\n// Check console for details`);
     } finally {
       setIsLoading(false);
     }
   };
-
-  // Rest of your existing functions (copyToClipboard, downloadCode, regenerateCode) remain the same
+  
   const copyToClipboard = () => {
     if (generatedCode) {
       navigator.clipboard.writeText(generatedCode);

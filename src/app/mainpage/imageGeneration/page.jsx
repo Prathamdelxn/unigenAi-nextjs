@@ -315,8 +315,10 @@
 import { useState, useRef } from 'react';
 import { FaMagic, FaImage, FaDownload, FaShare, FaHistory, FaPlus, FaMinus } from 'react-icons/fa';
 import { IoSparkles } from 'react-icons/io5';
+import { useAuth } from '@/app/context/AuthContext';
 
 export default function ImageGeneration() {
+   const {userData}=useAuth();
   const [prompt, setPrompt] = useState('');
   const [negativePrompt, setNegativePrompt] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('regular');
@@ -326,6 +328,24 @@ export default function ImageGeneration() {
   const [seed, setSeed] = useState(Math.floor(Math.random() * 1000000));
   const [steps, setSteps] = useState(30);
   const canvasRef = useRef(null);
+
+
+
+  const incrementImage = async () => {
+    console.log("datais",userData)
+    const email=userData.email;
+    const res = await fetch('/api/users/increment-image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+  
+    const data = await res.json();
+    console.log(data);
+  };
+  
 
   const imageFormats = [
     { id: 'raw', name: 'Raw', icon: <FaImage /> },
@@ -348,6 +368,7 @@ export default function ImageGeneration() {
       const response = await fetch(`${API_URL}?query=${prompt}&client_id=${API_KEY}`);
       const data = await response.json();
       setGeneratedImages(data.results);
+      incrementImage();
     } catch (error) {
       console.error("Error fetching images:", error);
     } finally {
