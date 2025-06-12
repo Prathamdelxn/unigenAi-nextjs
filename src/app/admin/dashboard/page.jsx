@@ -133,6 +133,7 @@ ChartJS.register(
 export default function DashboardPage() {
   const [showAdminForm, setShowAdminForm] = useState(false);
   const [users, setUsers] = useState([]);
+  const [usercounts,setCount]=useState();
   const [newAdmin, setNewAdmin] = useState({
     name: '',
     email: '',
@@ -172,8 +173,27 @@ export default function DashboardPage() {
     },
   };
 
+
+const userscount=async()=>{
+
+  try{
+
+    const res = await fetch("/api/user-count");
+
+    const data= await res.json();
+    console.log("asdf",data);
+    setCount(data)
+
+  }catch(err){
+    console.log("Internal Server error")
+
+  }
+
+}
+
   // In your useEffect where you fetch admins, also fetch chart data
   useEffect(() => {
+    userscount();
     const fetchChartData = async () => {
       // try {
       //   const res = await fetch('/api/admin/user-registrations');
@@ -298,7 +318,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard 
           title="Total Users" 
-          value="1,248" 
+          value={usercounts?.totalUsers} 
           change="+12.5%" 
           icon={<FiUsers className="text-indigo-500" />}
         />
@@ -310,13 +330,13 @@ export default function DashboardPage() {
         />
         <StatCard 
           title="Total Usage" 
-          value="1,024" 
+          value={usercounts?.grandTotal} 
           change="+28%" 
           icon={<FiPieChart className="text-blue-500" />}
         />
         <StatCard 
           title="Revenue" 
-          value="$24,800" 
+          value="₹ 00" 
           change="+18.2%" 
           icon={<FiPieChart className="text-purple-500" />}
         />
@@ -482,7 +502,7 @@ function StatCard({ title, value, change, icon }) {
         <div>
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
           <p className="text-2xl font-semibold mt-1 dark:text-white">{value}</p>
-          <p className={`text-sm ${change.startsWith('+') ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} mt-1`}>{change}</p>
+          {/* <p className={`text-sm ${change.startsWith('+') ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} mt-1`}>{change}</p> */}
         </div>
         <div className="h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
           {icon}

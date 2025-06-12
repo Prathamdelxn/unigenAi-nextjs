@@ -221,35 +221,17 @@ const[selectedplan ,setplan]=useState("Basic");
           <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50 backdrop-blur-lg">
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-medium">Billing History</h3>
-              <button className="text-sm text-indigo-400 hover:text-indigo-300 transition">
+              {/* <button className="text-sm text-indigo-400 hover:text-indigo-300 transition">
                 View All
-              </button>
+              </button> */}
             </div>
             
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 hover:bg-slate-700/30 rounded-lg transition">
-                <div>
-                  <div className="font-medium">Pro Plan Subscription</div>
-                  <div className="text-sm text-slate-400">June 1, 2023</div>
-                </div>
-                <div className="font-medium">$29.00</div>
-              </div>
               
-              <div className="flex justify-between items-center p-3 hover:bg-slate-700/30 rounded-lg transition">
-                <div>
-                  <div className="font-medium">Additional API Credits</div>
-                  <div className="text-sm text-slate-400">May 15, 2023</div>
-                </div>
-                <div className="font-medium">$10.00</div>
+              <div className="w-full flex justify-center">
+                Not Yet Any Transaction
               </div>
-              
-              <div className="flex justify-between items-center p-3 hover:bg-slate-700/30 rounded-lg transition">
-                <div>
-                  <div className="font-medium">Pro Plan Subscription</div>
-                  <div className="text-sm text-slate-400">May 1, 2023</div>
-                </div>
-                <div className="font-medium">$29.00</div>
-              </div>
+             
             </div>
           </div>
         </div>

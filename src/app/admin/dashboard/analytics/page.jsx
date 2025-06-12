@@ -116,10 +116,10 @@ export default function RevenueAnalysis() {
             <div className="flex justify-between">
               <div>
                 <p className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Total Revenue</p>
-                <p className="text-2xl font-semibold mt-1">${totalRevenue.toLocaleString()}</p>
+                <p className="text-2xl font-semibold mt-1">₹{totalRevenue.toLocaleString()}</p>
                 <div className="flex items-center mt-1">
-                  <FiTrendingUp className="text-green-500 mr-1" />
-                  <span className="text-sm text-green-600 dark:text-green-400">{growthRate}% growth</span>
+                  {/* <FiTrendingUp className="text-green-500 mr-1" /> */}
+                  {/* <span className="text-sm text-green-600 dark:text-green-400">{growthRate}% growth</span> */}
                 </div>
               </div>
               <div className={`h-12 w-12 rounded-lg ${darkMode ? 'bg-green-900' : 'bg-green-100'} flex items-center justify-center`}>
@@ -133,10 +133,10 @@ export default function RevenueAnalysis() {
               <div className="flex justify-between">
                 <div>
                   <p className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{plan.name} Plan</p>
-                  <p className="text-2xl font-semibold mt-1">${plan.revenue.toLocaleString()}</p>
+                  <p className="text-2xl font-semibold mt-1">₹{plan.revenue.toLocaleString()}</p>
                   <div className="flex justify-between text-xs mt-1">
-                    <span className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{plan.users} users</span>
-                    <span className="text-red-500">Churn: {plan.churn}%</span>
+                    {/* <span className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{plan.users} users</span> */}
+                    {/* <span className="text-red-500">Churn: {plan.churn}%</span> */}
                   </div>
                 </div>
                 <div className={`h-12 w-12 rounded-lg flex items-center justify-center`} style={{ backgroundColor: darkMode ? `${plan.color}20` : `${plan.color}20` }}>
@@ -243,7 +243,7 @@ export default function RevenueAnalysis() {
                         contentStyle={darkMode ? { backgroundColor: '#1F2937', borderColor: '#374151' } : {}}
                         labelStyle={darkMode ? { color: '#F3F4F6' } : {}}
                       />
-                      <Bar dataKey="revenue" name="Revenue ($)">
+                      <Bar dataKey="revenue" name="Revenue (₹)">
                         {planDistributionData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -297,7 +297,7 @@ export default function RevenueAnalysis() {
                               {txn.plan}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm">${txn.amount}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">₹{txn.amount}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">{txn.date}</td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
