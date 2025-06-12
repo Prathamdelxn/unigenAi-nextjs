@@ -175,27 +175,27 @@ export default function DashboardPage() {
   // In your useEffect where you fetch admins, also fetch chart data
   useEffect(() => {
     const fetchChartData = async () => {
-      try {
-        const res = await fetch('/api/admin/user-registrations');
-        const data = await res.json();
+      // try {
+      //   const res = await fetch('/api/admin/user-registrations');
+      //   const data = await res.json();
         
-        if (data.success) {
-          setChartData({
-            labels: data.data.months,
-            datasets: [
-              {
-                label: 'New Users',
-                data: data.data.counts,
-                backgroundColor: 'rgba(99, 102, 241, 0.6)',
-                borderColor: 'rgba(99, 102, 241, 1)',
-                borderWidth: 1,
-              },
-            ],
-          });
-        }
-      } catch (err) {
-        console.error('Error fetching chart data:', err);
-      }
+      //   if (data.success) {
+      //     setChartData({
+      //       labels: data.data.months,
+      //       datasets: [
+      //         {
+      //           label: 'New Users',
+      //           data: data.data.counts,
+      //           backgroundColor: 'rgba(99, 102, 241, 0.6)',
+      //           borderColor: 'rgba(99, 102, 241, 1)',
+      //           borderWidth: 1,
+      //         },
+      //       ],
+      //     });
+      //   }
+      // } catch (err) {
+      //   console.log('Error fetching chart data:');
+      // }
     };
 
     fetchChartData();

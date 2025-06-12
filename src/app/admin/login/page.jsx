@@ -4,22 +4,52 @@ import { motion } from 'framer-motion';
 import { FiLock, FiMail, FiEye, FiEyeOff, FiArrowRight } from 'react-icons/fi';
 import { FaShieldAlt, FaChartLine, FaCog } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/context/AuthContext';
+import axios from 'axios';
 export default function AdminLogin() {
+
+  const { login } = useAuth();
     const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    if(email=="admin@gmail.com" && password=="admin"){
-        router.push("/admin/dashboard");
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   if(email=="admin@gmail.com" && password=="admin"){
+  //       router.push("/admin/dashboard");
 
+  //   }
+  //   // Authentication logic here
+  // };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+
+  try {
+    const response = await axios.post('/api/admin/login', {
+      email,
+      password
+    });
+console.log(response);
+    if (response.data.success===true) {
+      // Store token if provided
+     
+  login(response.data.token, response.data.user);
+      // Navigate to dashboard
+      router.push('/admin/dashboard');
+    } else {
+      alert(response.data.message || 'Invalid credentials');
     }
-    // Authentication logic here
-  };
+  } catch (error) {
+    console.error('Login Error:', error);
+    alert(error.response?.data?.message || 'Login failed');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">

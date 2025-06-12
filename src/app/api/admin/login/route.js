@@ -1,61 +1,9 @@
 
-// 'use server'
-// import connectDB from '@/utils/db';
-// import User from '@/models/Users';
-
-// export async function POST(req) {
-//   try {
-//     const body = await req.json();
-//     const { email, password } = body;
-
-//     if (!email || !password) {
-//       return new Response(
-//         JSON.stringify({ success: false, message: 'Email and password are required' }),
-//         { status: 400 }
-//       );
-//     }
-
-//     await connectDB();
-
-//     const user = await User.findOne({ email });
-
-//     if (!user) {
-//       return new Response(
-//         JSON.stringify({ success: false, message: 'User not found' }),
-//         { status: 404 }
-//       );
-//     }
-
-//     if (user.password !== password) {
-//       return new Response(
-//         JSON.stringify({ success: false, message: 'Invalid credentials' }),
-//         { status: 401 }
-//       );
-//     }
-
-//     return new Response(
-//       JSON.stringify({
-//         success: true,
-//         message: 'Login successful',
-//         user: { name: user.name, email: user.email },
-//       }),
-//       { status: 200 }
-//     );
-//   } catch (error) {
-//     console.error('Login error:', error);
-//     return new Response(
-//       JSON.stringify({ success: false, message: 'Internal server error' }),
-//       { status: 500 }
-//     );
-//   }
-// }
-
-
 
 'use server'
 
 import connectDB from '@/utils/db';
-import User from '@/models/Users';
+import Admin from '@/models/Admin';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
@@ -74,7 +22,7 @@ export async function POST(req) {
 
     await connectDB();
 
-    const user = await User.findOne({ email });
+    const user = await Admin.findOne({ email });
 
     if (!user) {
       return new Response(
@@ -103,7 +51,7 @@ export async function POST(req) {
         success: true,
         message: 'Login successful',
         token, // send token to the frontend
-        user: { name: user.name, email: user.email, id:user._id,plan:user.plan},
+        user: user,
       }),
       {
         status: 200,

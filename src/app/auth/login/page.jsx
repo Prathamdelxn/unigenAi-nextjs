@@ -305,6 +305,11 @@ export default function LoginPage() {
                 Create an account
               </Link>
             </p>
+            <br />
+<Link href="/admin/dashboard">
+ <span  className='text-sm text-gray-400' >Admin Login Here</span>
+</Link>
+           
           </motion.div>
         </motion.div>
 

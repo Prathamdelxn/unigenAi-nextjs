@@ -1,18 +1,35 @@
 'use client';
 import { Inter } from 'next/font/google';
-import { useState } from 'react';
-import { FiMenu, FiX, FiUsers, FiFolder, FiSettings, FiPieChart, FiCalendar, FiBell } from 'react-icons/fi';
+import { useState ,useEffect} from 'react';
+import { FiMenu, FiX, FiUsers, FiFolder, FiSettings, FiPieChart, FiCalendar  ,FiBell } from 'react-icons/fi';
+import { FaUser,FaEnvelope, FaCrown, FaHistory, FaCreditCard, FaSignOutAlt, FaChevronRight,FaCog } from 'react-icons/fa';
+
 import { AiOutlineDashboard } from 'react-icons/ai';
 import { BsLightningCharge } from 'react-icons/bs';
 import Link from 'next/link';
-
+import { useRouter } from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
+ const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+      const user = localStorage.getItem('user')
+      const data=JSON.parse(user)
+      console.log(JSON.parse(user));
+    if (!token && data?.role!=="Admin") {
+      router.replace('/admin/login') // redirect to login
+    }
+  }, [])
 
+const logout=()=>{
+   localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      router.push("/admin/login")
+}
   return (
     <div lang="en" className={darkMode ? 'dark' : ''}>
       <div className={`${inter.className} bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex h-screen overflow-hidden`}>
@@ -43,7 +60,7 @@ export default function RootLayout({ children }) {
             <NavItem icon={<FiCalendar />} text="Subscription" href="/admin/dashboard/Subscription-management" open={sidebarOpen} />
           </nav>
 
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
+          {/* <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
             <button 
               onClick={() => setDarkMode(!darkMode)}
               className="w-full flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
@@ -54,7 +71,14 @@ export default function RootLayout({ children }) {
               {sidebarOpen && <span className="ml-3 font-medium">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>}
             </button>
             <NavItem icon={<FiSettings />} text="Settings" href="/settings" open={sidebarOpen} />
-          </div>
+          </div> */}
+           <button onClick={logout}  className="w-full flex items-center justify-between p-3 rounded-lg text-red-400 hover:bg-slate-700/50 transition">
+                          <span className="flex items-center">
+                            <FaSignOutAlt className="mr-2" />
+                            Sign Out
+                          </span>
+                          <FaChevronRight size={12} />
+                        </button>
         </aside>
 
         {/* Main Content */}

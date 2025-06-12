@@ -11,7 +11,7 @@ export default function AccountPage() {
 
  const {userData}=useAuth();
    const [newuserData, setnewUserData] = useState(null);
-
+const[selectedplan ,setplan]=useState("Basic");
   useEffect(() => {
     console.log("datais",userData)
     if (userData) {
@@ -53,13 +53,13 @@ export default function AccountPage() {
   
 
   const subscriptionPlans = {
-    basic: { name: "Basic", color: "bg-gray-600", features: ["Image Generation", "Basic Support"] },
-    pro: { name: "Pro", color: "bg-gradient-to-r from-purple-600 to-indigo-700", features: ["All Basic features", "Video Generation", "Priority Support", "Higher Resolution"] },
-    lite:{name:"Lite",color:"bg-gradient-to-r from-green-600 to-blue-700",features:["No watermark" ,"Standard Support","High Quality Resolution"]},
+    Basic: { name: "Basic", color: "bg-gray-600", features: ["Image Generation", "Basic Support"] },
+    ProcessingInstruction: { name: "Pro", color: "bg-gradient-to-r from-purple-600 to-indigo-700", features: ["All Basic features", "Video Generation", "Priority Support", "Higher Resolution"] },
+    Lite:{name:"Lite",color:"bg-gradient-to-r from-green-600 to-blue-700",features:["No watermark" ,"Standard Support","High Quality Resolution"]},
     advanced: { name: "Advanced", color: "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600", features: ["All Pro features", "Interview Prep", "API Access", "Highest Priority"] }
   };
 
-  const currentPlan = subscriptionPlans[user.subscription] || subscriptionPlans.basic;
+  const currentPlan = subscriptionPlans[user?.subscription] || subscriptionPlans.basic;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -143,25 +143,25 @@ export default function AccountPage() {
         {/* Main Content */}
         <div className="w-full md:w-2/3 space-y-6">
           {/* Subscription Card */}
-          <div className={`rounded-2xl overflow-hidden ${currentPlan.color} text-white`}>
+          <div className={`rounded-2xl overflow-hidden ${currentPlan?.color} text-white`}>
             <div className="p-6">
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-sm uppercase tracking-wider font-bold opacity-80">Current Plan</h3>
                   <h2 className="text-2xl font-bold mt-1 flex items-center">
-                    {currentPlan.name}
+                    {currentPlan?.name}
                     {user.subscription !== 'basic' && (
                       <RiVipCrownFill className="ml-2 text-yellow-300" />
                     )}
                   </h2>
                 </div>
-                <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm transition">
+                {/* <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm transition">
                   Manage Subscription
-                </button>
+                </button> */}
               </div>
 
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                {currentPlan.features.map((feature, index) => (
+                {currentPlan?.features.map((feature, index) => (
                   <div key={index} className="flex items-center">
                     <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center mr-3">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -174,9 +174,11 @@ export default function AccountPage() {
               </div>
             </div>
             <div className="bg-black/10 px-6 py-3 text-center">
+            <Link href="/mainpage/manage-subscription">
               <button className="text-sm font-medium opacity-80 hover:opacity-100 transition">
                 View all plan options →
               </button>
+              </Link>
             </div>
           </div>
 
