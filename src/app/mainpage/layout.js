@@ -71,7 +71,7 @@ export default function DashboardLayout({ children }) {
     { href: "/mainpage/codegeneration", label: "Code Generation", icon: "📊" },
     { href: "/mainpage/audiogeneration", label: "Audio Generation", icon: "🎵" },
     { 
-      href: "/dashboard/interview", 
+      href: "/mainpage/interview", 
       label: "Interview Preparation", 
       icon: "💼",
       premium: subscription !== "advanced"

@@ -1,6 +1,6 @@
 // app/dashboard/account/page.jsx
 'use client'
-
+import Link from 'next/link';
 import { logout } from '@/utils/logout';
 import { useAuth } from '@/app/context/AuthContext';
 import { FaUser,  FaChevronRight,FaEnvelope, FaCrown, FaHistory, FaCreditCard, FaSignOutAlt, FaCog } from 'react-icons/fa';
@@ -43,13 +43,14 @@ export default function AccountPage() {
     email: newuserData?.email || "Loading...",
     subscription: newuserData?.plan || "Loading...",
     imageGenerator:newuserData?.imageGenerator || "0",
-    audioGenerator:newuserData?.audioGenerator || "0",
-    audioGenerator:newuserData?.audioGenerator || "0",
+    videoGenerator:newuserData?.videoGenerator || "0",
+    codeGenerator:newuserData?.codeGenerator || "0",
 
 
   
    
   };
+  
 
   const subscriptionPlans = {
     basic: { name: "Basic", color: "bg-gray-600", features: ["Image Generation", "Basic Support"] },
@@ -103,6 +104,7 @@ export default function AccountPage() {
               Quick Actions
             </h3>
             <div className="space-y-3">
+              <Link href="/mainpage/account/security">
               <button className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/50 transition">
                 <span className="flex items-center">
                   <MdSecurity className="mr-2" />
@@ -110,6 +112,7 @@ export default function AccountPage() {
                 </span>
                 <FaChevronRight size={12} />
               </button>
+              </Link>
               {/* <button className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/50 transition">
                 <span className="flex items-center">
                   <MdApi className="mr-2" />
@@ -117,6 +120,7 @@ export default function AccountPage() {
                 </span>
                 <FaChevronRight size={12} />
               </button> */}
+              <Link href="/mainpage/account/history">
               <button className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/50 transition">
                 <span className="flex items-center">
                   <FaHistory className="mr-2" />
@@ -124,6 +128,7 @@ export default function AccountPage() {
                 </span>
                 <FaChevronRight size={12} />
               </button>
+              </Link>
               <button onClick={logout} className="w-full flex items-center justify-between p-3 rounded-lg text-red-400 hover:bg-slate-700/50 transition">
                 <span className="flex items-center">
                   <FaSignOutAlt className="mr-2" />
@@ -200,11 +205,11 @@ export default function AccountPage() {
                 </div>
                 <div className="bg-slate-700/50 p-4 rounded-lg">
                   <div className="text-slate-400 text-sm">Videos Created</div>
-                  <div className="text-xl font-bold mt-1">{user.audioGenerator}</div>
+                  <div className="text-xl font-bold mt-1">{user.videoGenerator}</div>
                 </div>
                 <div className="bg-slate-700/50 p-4 rounded-lg">
-                  <div className="text-slate-400 text-sm">Audio Created</div>
-                  <div className="text-xl font-bold mt-1">{user.audioGenerator}</div>
+                  <div className="text-slate-400 text-sm">Code Created</div>
+                  <div className="text-xl font-bold mt-1">{user.codeGenerator}</div>
                 </div>
               </div>
             </div>

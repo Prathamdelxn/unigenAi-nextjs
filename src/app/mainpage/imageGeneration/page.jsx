@@ -345,7 +345,38 @@ export default function ImageGeneration() {
     const data = await res.json();
     console.log(data);
   };
+   const historyAdd=async(prompt)=>{
+    const id=userData.id;
+     const now = new Date();
+     const time = now.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  const day = now.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+    const historyData = {
+    userId: id,
+    toolType: "Image Generation",
+    details: prompt,
+    time: time,
+    day: day
+  };
+     const res = await fetch('/api/users/history-add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(historyData),
+    });
   
+    const data = await res.json();
+    console.log(data);
+   }
 
   const imageFormats = [
     { id: 'raw', name: 'Raw', icon: <FaImage /> },
@@ -369,6 +400,7 @@ export default function ImageGeneration() {
       const data = await response.json();
       setGeneratedImages(data.results);
       incrementImage();
+      historyAdd(prompt);
     } catch (error) {
       console.error("Error fetching images:", error);
     } finally {

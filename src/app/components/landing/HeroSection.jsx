@@ -48,7 +48,7 @@ export default function HeroSection() {
                 transition={{ delay: 0.4 }}
                 className="block bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mt-4"
               >
-                with Unigne AI
+                with Unigen AI
               </motion.span>
             </h1>
 

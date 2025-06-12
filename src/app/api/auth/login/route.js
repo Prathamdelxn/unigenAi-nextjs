@@ -103,7 +103,7 @@ export async function POST(req) {
         success: true,
         message: 'Login successful',
         token, // send token to the frontend
-        user: { name: user.name, email: user.email },
+        user: { name: user.name, email: user.email, id:user._id},
       }),
       {
         status: 200,
